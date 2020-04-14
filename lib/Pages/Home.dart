@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:awapp/Pages/Article.dart';
 import 'package:awapp/Styles.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -22,11 +23,13 @@ class _HomeState extends State<Home> {
   var img = [];
   var authors = [];
   var dates = [];
+  var links = [];
   int postamount = 0;
 
   void mainStream(int post) async {
     var response = await http.get(
         'https://androidwedakarayo.com/ghost/api/v3/content/posts?key=8aff8bccef419606356a20bf70&limit=1&page=${post.toString()}&include=authors');
+
     if (response.statusCode == 200) {
       var posts = jsonDecode(response.body);
       setState(() {
@@ -37,27 +40,29 @@ class _HomeState extends State<Home> {
         img.add(posts['posts'][0]['feature_image']);
         authors.add(posts['posts'][0]['authors'][0]['name']);
         dates.add(posts['posts'][0]['published_at']);
+        links.add(posts['posts'][0]['url']);
       });
       postsList = posts;
     }
     postamount += 1;
     if (post < postslength) {
       mainStream(post + 1);
+    } else {
+      refreshController.loadComplete();
+      refreshController.refreshCompleted();
     }
   }
 
-  void refresh() {
+  void refresh() async {
+    postslength = 0;
+    txt.clear();
+    titles.clear();
+    img.clear();
+    authors.clear();
+    dates.clear();
     setState(() {
-      postslength = 0;
-      txt.clear();
-      titles.clear();
-      img.clear();
-      authors.clear();
-      dates.clear();
       postamount = 0;
       mainStream(1);
-      refreshController.refreshCompleted();
-      refreshController.loadComplete();
     });
   }
 
@@ -74,8 +79,9 @@ class _HomeState extends State<Home> {
     return Scaffold(
       drawer: RaisedButton(onPressed: () {}),
       endDrawer: RaisedButton(onPressed: () {}),
-      backgroundColor: Colors.grey[700],
+      backgroundColor: Colors.green,
       appBar: AppBar(
+        elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -85,10 +91,7 @@ class _HomeState extends State<Home> {
       ),
       body: SmartRefresher(
         enablePullDown: true,
-        header: WaterDropHeader(
-          completeDuration: Duration(seconds: 1),
-          waterDropColor: Colors.green,
-        ),
+        header: WaterDropMaterialHeader(),
         onRefresh: () {
           refresh();
         },
@@ -112,6 +115,7 @@ class _HomeState extends State<Home> {
                                   title: titles[index],
                                   author: authors[index],
                                   dates: dates[index],
+                                  url: links[index],
                                 )));
                   },
                   child: Card(
@@ -124,18 +128,17 @@ class _HomeState extends State<Home> {
                             topRight: Radius.circular(16),
                             topLeft: Radius.circular(16),
                           ),
-                          child: Image.network(
-                            img[index].toString(),
-                            loadingBuilder: (BuildContext context, Widget child,
-                                ImageChunkEvent loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Container(
-                                height: 128,
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              );
-                            },
+                          child: new CachedNetworkImage(
+                            imageUrl: img[index],
+                            placeholder: (context, url) => Container(
+                              margin: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(8),
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.green,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
                         Container(
