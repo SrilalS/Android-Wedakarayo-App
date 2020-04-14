@@ -80,6 +80,7 @@ class _HomeState extends State<Home> {
       drawer: drawer(h, w),
       endDrawer: RaisedButton(onPressed: () {}),
       backgroundColor: Colors.green,
+      
       appBar: AppBar(
         elevation: 0,
         title: Row(
@@ -159,83 +160,64 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Container drawer(h,w){
-    return Container(
-      padding: EdgeInsets.only(right: 8),
-      color: Colors.transparent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            width:w *0.6,
-            height: 48,
-            child: RaisedButton(
-              color: Colors.green,
-              child: Text('Menu Item' , style: whitetxt(16),),
-              shape: roundedSideMenu(32.0),
-              onPressed: (){
-                Navigator.pop(context);
-              },),
-          ),
-
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            width:w *0.6,
-            height: 48,
-            child: RaisedButton(
-              color: Colors.green,
-              child: Text('Menu Item' , style: whitetxt(16),),
-              shape: roundedSideMenu(32.0),
-              onPressed: (){
-                Navigator.pop(context);
-              },),
-          ),
-
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            width:w *0.6,
-            height: 48,
-            child: RaisedButton(
-              color: Colors.green,
-              child: Text('Menu Item' , style: whitetxt(16),),
-              shape: roundedSideMenu(32.0),
-              onPressed: (){
-                Navigator.pop(context);
-              },),
-          ),
-
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            width:w *0.6,
-            height: 48,
-            child: RaisedButton(
-              color: Colors.green,
-              child: Text('Menu Item' , style: whitetxt(16),),
-              shape: roundedSideMenu(32.0),
-              onPressed: (){
-                Navigator.pop(context);
-              },),
-          ),
-
-          Container(
-            margin: EdgeInsets.only(bottom: 8),
-            width:w *0.6,
-            height: 48,
-            child: RaisedButton(
-              color: Colors.green,
-              child: Text('Menu Item' , style: whitetxt(16),),
-              shape: roundedSideMenu(32.0),
-              onPressed: (){
-                Navigator.pop(context);
-              },),
-          ),
-
-          
-
-          
-        ],
-      ),
+  Column drawer(h, w) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: w * 0.2,
+          width: w * 0.2,
+          child: Card(
+              shape: rounded(256.0),
+              child: Icon(
+                Icons.android,
+                size: 48,
+                color: Colors.green,
+              )),
+        ),
+        SizedBox(height: h/4,),
+        Column(
+          children: <Widget>[
+            Container(
+              
+              margin: EdgeInsets.only(bottom: 8),
+              width: w * 0.6,
+              height: 48,
+              
+              child: RaisedButton(
+                elevation: 8,
+                color: Colors.green,
+                child: Text(
+                  'Join Android වැඩකාරයෝ',
+                  style: whitetxt(16),
+                ),
+                shape: roundedSideMenu(32.0),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              width: w * 0.6,
+              height: 48,
+              child: RaisedButton(
+                elevation: 8,
+                color: Colors.green,
+                child: Text(
+                  'Menu Item',
+                  style: whitetxt(16),
+                ),
+                shape: roundedSideMenu(32.0),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+           
+          ],
+        ),
+      ],
     );
   }
 }
