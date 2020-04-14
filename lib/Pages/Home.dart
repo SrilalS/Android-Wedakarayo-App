@@ -77,7 +77,7 @@ class _HomeState extends State<Home> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: RaisedButton(onPressed: () {}),
+      drawer: drawer(h, w),
       endDrawer: RaisedButton(onPressed: () {}),
       backgroundColor: Colors.green,
       appBar: AppBar(
@@ -155,6 +155,86 @@ class _HomeState extends State<Home> {
                 ),
               );
             }),
+      ),
+    );
+  }
+
+  Container drawer(h,w){
+    return Container(
+      padding: EdgeInsets.only(right: 8),
+      color: Colors.transparent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            width:w *0.6,
+            height: 48,
+            child: RaisedButton(
+              color: Colors.green,
+              child: Text('Menu Item' , style: whitetxt(16),),
+              shape: roundedSideMenu(32.0),
+              onPressed: (){
+                Navigator.pop(context);
+              },),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            width:w *0.6,
+            height: 48,
+            child: RaisedButton(
+              color: Colors.green,
+              child: Text('Menu Item' , style: whitetxt(16),),
+              shape: roundedSideMenu(32.0),
+              onPressed: (){
+                Navigator.pop(context);
+              },),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            width:w *0.6,
+            height: 48,
+            child: RaisedButton(
+              color: Colors.green,
+              child: Text('Menu Item' , style: whitetxt(16),),
+              shape: roundedSideMenu(32.0),
+              onPressed: (){
+                Navigator.pop(context);
+              },),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            width:w *0.6,
+            height: 48,
+            child: RaisedButton(
+              color: Colors.green,
+              child: Text('Menu Item' , style: whitetxt(16),),
+              shape: roundedSideMenu(32.0),
+              onPressed: (){
+                Navigator.pop(context);
+              },),
+          ),
+
+          Container(
+            margin: EdgeInsets.only(bottom: 8),
+            width:w *0.6,
+            height: 48,
+            child: RaisedButton(
+              color: Colors.green,
+              child: Text('Menu Item' , style: whitetxt(16),),
+              shape: roundedSideMenu(32.0),
+              onPressed: (){
+                Navigator.pop(context);
+              },),
+          ),
+
+          
+
+          
+        ],
       ),
     );
   }

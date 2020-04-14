@@ -7,6 +7,11 @@ RoundedRectangleBorder rounded(size){
   );
 }
 
+RoundedRectangleBorder roundedSideMenu(size){
+  return RoundedRectangleBorder(
+    borderRadius: BorderRadius.only(topRight: Radius.circular(size),bottomRight: Radius.circular(size), ));
+}
+
 TextStyle whitetxt(double size){
   return TextStyle(fontSize: size, color: Colors.white);
 }
