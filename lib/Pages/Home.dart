@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:awapp/Pages/Article.dart';
+import 'package:awapp/Pages/Keys.dart';
 import 'package:awapp/Styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +26,11 @@ class _HomeState extends State<Home> {
   var dates = [];
   var links = [];
   int postamount = 0;
+  String apikey = apiKey();
 
   void mainStream(int post) async {
     var response = await http.get(
-        'https://androidwedakarayo.com/ghost/api/v3/content/posts?key=8aff8bccef419606356a20bf70&limit=1&page=${post.toString()}&include=authors');
+        'https://androidwedakarayo.com/ghost/api/v3/content/posts?key=${apikey}&limit=1&page=${post.toString()}&include=authors');
 
     if (response.statusCode == 200) {
       var posts = jsonDecode(response.body);
