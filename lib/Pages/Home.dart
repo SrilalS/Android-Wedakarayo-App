@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:awapp/Pages/Article.dart';
 import 'package:awapp/Pages/Keys.dart';
+import 'package:awapp/Pages/sign.dart';
 import 'package:awapp/Styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -81,86 +82,82 @@ class _HomeState extends State<Home> {
     double w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      
       drawerScrimColor: Colors.grey[900].withOpacity(0.95),
       drawer: drawer(h, w),
       backgroundColor: Colors.green,
-
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
         title: Text('Android වැඩකාරයෝ'),
-        ),
-      
+      ),
       bottomNavigationBar: btnav(),
-
       body: SmartRefresher(
-      enablePullDown: true,
-      header: WaterDropMaterialHeader(),
-      onRefresh: () {
-        refresh();
-      },
-      controller: refreshController,
-      child: ListView.builder(
-          itemCount: postamount,
-          itemBuilder: (context, index) {
-            return Container(
-              padding: EdgeInsets.all(8),
-              width: w * 0.9,
-              child: InkWell(
-                splashColor: Colors.green[900],
-                borderRadius: BorderRadius.circular(16),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Article(
-                                img: img[index],
-                                post: txt[index],
-                                title: titles[index],
-                                author: authors[index],
-                                dates: dates[index],
-                                url: links[index],
-                              )));
-                },
-                child: Card(
-                  elevation: 8,
-                  shape: rounded(16.0),
-                  child: Column(
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(16),
-                          topLeft: Radius.circular(16),
-                        ),
-                        child: new CachedNetworkImage(
-                          imageUrl: img[index],
-                          placeholder: (context, url) => Container(
-                            margin: EdgeInsets.all(8),
-                            padding: EdgeInsets.all(8),
-                            child: CircularProgressIndicator(
-                              backgroundColor: Colors.green,
-                            ),
+        enablePullDown: true,
+        header: WaterDropMaterialHeader(),
+        onRefresh: () {
+          refresh();
+        },
+        controller: refreshController,
+        child: ListView.builder(
+            itemCount: postamount,
+            itemBuilder: (context, index) {
+              return Container(
+                padding: EdgeInsets.all(8),
+                width: w * 0.9,
+                child: InkWell(
+                  splashColor: Colors.green[900],
+                  borderRadius: BorderRadius.circular(16),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Article(
+                                  img: img[index],
+                                  post: txt[index],
+                                  title: titles[index],
+                                  author: authors[index],
+                                  dates: dates[index],
+                                  url: links[index],
+                                )));
+                  },
+                  child: Card(
+                    elevation: 8,
+                    shape: rounded(16.0),
+                    child: Column(
+                      children: <Widget>[
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(16),
+                            topLeft: Radius.circular(16),
                           ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                          child: new CachedNetworkImage(
+                            imageUrl: img[index],
+                            placeholder: (context, url) => Container(
+                              margin: EdgeInsets.all(8),
+                              padding: EdgeInsets.all(8),
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.green,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(4),
-                        padding: EdgeInsets.all(4),
-                        child: Text(
-                          titles[index],
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Container(
+                          margin: EdgeInsets.all(4),
+                          padding: EdgeInsets.all(4),
+                          child: Text(
+                            titles[index],
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          }),
-        ),
+              );
+            }),
+      ),
     );
   }
 
@@ -186,15 +183,18 @@ class _HomeState extends State<Home> {
               'Android වැඩකාරයෝ',
               style: whiteboldtxt(16),
             ),
-            Text('App V 0.1',style: whitetxt(16)),
-
+            Text('App V 0.1', style: whitetxt(16)),
             RaisedButton(
-              child: Text('Login', style: whitetxt(16),),
-              color: Colors.green,
-              shape: rounded(16.0),
-              onPressed: (){
-                
-              })
+                child: Text(
+                  'Login',
+                  style: whitetxt(16),
+                ),
+                color: Colors.green,
+                shape: rounded(16.0),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Sign()));
+                })
           ],
         ),
         SizedBox(
@@ -236,7 +236,6 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
-
             Container(
               margin: EdgeInsets.only(bottom: 8),
               width: w * 0.6,
@@ -262,7 +261,7 @@ class _HomeState extends State<Home> {
 
   BottomNavigationBar btnav() {
     return BottomNavigationBar(
-     elevation: 0,
+        elevation: 0,
         onTap: (idx) {
           setState(() {
             btindex = idx;
