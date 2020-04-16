@@ -34,8 +34,7 @@ class _HomeState extends State<Home> {
   //SigninData
   var uname = 'Android වැඩකාරයෝ';
   var uid = '0';
-  var uimage =
-      'https://androidwedakarayo.com/content/images/2020/04/xandroid-11-android-wedakarayo.jpg.pagespeed.ic.-tx9oKiZEz.webp';
+  var uimage = 'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
   var islogged = 'Login';
   var uemail = 'App V0.1';
   var logcolor = Colors.green;
@@ -227,7 +226,7 @@ class _HomeState extends State<Home> {
                       uname = 'Android වැඩකාරයෝ';
                        uid = '0';
                        uimage =
-                          'https://androidwedakarayo.com/content/images/2020/04/xandroid-11-android-wedakarayo.jpg.pagespeed.ic.-tx9oKiZEz.webp';
+                          'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
                        islogged = 'Login';
                        uemail = 'App V0.1';
                        logcolor = Colors.green;
