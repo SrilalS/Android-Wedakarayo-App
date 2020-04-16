@@ -17,7 +17,7 @@ TextStyle whitetxt(double size){
 }
 
 TextStyle whiteboldtxt(double size){
-  return TextStyle(fontSize: size,fontWeight: FontWeight.bold,  color: Colors.white);
+  return TextStyle(fontSize: size,fontWeight: FontWeight.bold,  color: Colors.white,);
 }
 
 TextStyle blacktxt(double size){

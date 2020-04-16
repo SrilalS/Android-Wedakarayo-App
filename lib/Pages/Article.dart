@@ -40,6 +40,11 @@ class _ArticleState extends State<Article> {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.share),
+        onPressed: (){
+        Share.share(widget.url);
+      }),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -125,19 +130,13 @@ class _ArticleState extends State<Article> {
                 child: Html(data: widget.post),
               ),
               Container(
+                height: 128,
                 color: Colors.green,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    FlatButton(
-                        onPressed: () {
-                          Share.share(widget.url);
-                        },
-                        child: Icon(
-                          Icons.share,
-                          color: Colors.white,
-                        ))
+                    //Footer Here
                   ],
                 ),
               )

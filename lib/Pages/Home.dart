@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  int btindex = 0;
   var postsList;
   var postslength = 0;
   var txt = [];
@@ -78,87 +79,88 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      drawer: drawer(h, w),
-      endDrawer: RaisedButton(onPressed: () {}),
-      backgroundColor: Colors.green,
       
+      drawerScrimColor: Colors.grey[900].withOpacity(0.95),
+      drawer: drawer(h, w),
+      backgroundColor: Colors.green,
+
       appBar: AppBar(
         elevation: 0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Android වැඩකාරයෝ'),
-          ],
+        centerTitle: true,
+        title: Text('Android වැඩකාරයෝ'),
         ),
-      ),
+      
+      bottomNavigationBar: btnav(),
+
       body: SmartRefresher(
-        enablePullDown: true,
-        header: WaterDropMaterialHeader(),
-        onRefresh: () {
-          refresh();
-        },
-        controller: refreshController,
-        child: ListView.builder(
-            itemCount: postamount,
-            itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.all(8),
-                width: w * 0.9,
-                child: InkWell(
-                  splashColor: Colors.green[900],
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Article(
-                                  img: img[index],
-                                  post: txt[index],
-                                  title: titles[index],
-                                  author: authors[index],
-                                  dates: dates[index],
-                                  url: links[index],
-                                )));
-                  },
-                  child: Card(
-                    elevation: 8,
-                    shape: rounded(16.0),
-                    child: Column(
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(16),
-                            topLeft: Radius.circular(16),
-                          ),
-                          child: new CachedNetworkImage(
-                            imageUrl: img[index],
-                            placeholder: (context, url) => Container(
-                              margin: EdgeInsets.all(8),
-                              padding: EdgeInsets.all(8),
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.green,
-                              ),
+      enablePullDown: true,
+      header: WaterDropMaterialHeader(),
+      onRefresh: () {
+        refresh();
+      },
+      controller: refreshController,
+      child: ListView.builder(
+          itemCount: postamount,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: EdgeInsets.all(8),
+              width: w * 0.9,
+              child: InkWell(
+                splashColor: Colors.green[900],
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Article(
+                                img: img[index],
+                                post: txt[index],
+                                title: titles[index],
+                                author: authors[index],
+                                dates: dates[index],
+                                url: links[index],
+                              )));
+                },
+                child: Card(
+                  elevation: 8,
+                  shape: rounded(16.0),
+                  child: Column(
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(16),
+                          topLeft: Radius.circular(16),
+                        ),
+                        child: new CachedNetworkImage(
+                          imageUrl: img[index],
+                          placeholder: (context, url) => Container(
+                            margin: EdgeInsets.all(8),
+                            padding: EdgeInsets.all(8),
+                            child: CircularProgressIndicator(
+                              backgroundColor: Colors.green,
                             ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
                           ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                         ),
-                        Container(
-                          margin: EdgeInsets.all(4),
-                          padding: EdgeInsets.all(4),
-                          child: Text(
-                            titles[index],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(4),
+                        padding: EdgeInsets.all(4),
+                        child: Text(
+                          titles[index],
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              );
-            }),
-      ),
+              ),
+            );
+          }),
+        ),
     );
   }
 
@@ -166,26 +168,44 @@ class _HomeState extends State<Home> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Container(
-          height: w * 0.2,
-          width: w * 0.2,
-          child: Card(
-              shape: rounded(256.0),
-              child: Icon(
-                Icons.android,
-                size: 48,
-                color: Colors.green,
-              )),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              height: w * 0.2,
+              width: w * 0.2,
+              child: Card(
+                  shape: rounded(256.0),
+                  child: Icon(
+                    Icons.android,
+                    size: 48,
+                    color: Colors.green,
+                  )),
+            ),
+            Text(
+              'Android වැඩකාරයෝ',
+              style: whiteboldtxt(16),
+            ),
+            Text('App V 0.1',style: whitetxt(16)),
+
+            RaisedButton(
+              child: Text('Login', style: whitetxt(16),),
+              color: Colors.green,
+              shape: rounded(16.0),
+              onPressed: (){
+                
+              })
+          ],
         ),
-        SizedBox(height: h/4,),
+        SizedBox(
+          height: h / 4,
+        ),
         Column(
           children: <Widget>[
             Container(
-              
               margin: EdgeInsets.only(bottom: 8),
               width: w * 0.6,
               height: 48,
-              
               child: RaisedButton(
                 elevation: 8,
                 color: Colors.green,
@@ -207,7 +227,7 @@ class _HomeState extends State<Home> {
                 elevation: 8,
                 color: Colors.green,
                 child: Text(
-                  'Menu Item',
+                  'Visit WebSite',
                   style: whitetxt(16),
                 ),
                 shape: roundedSideMenu(32.0),
@@ -216,10 +236,48 @@ class _HomeState extends State<Home> {
                 },
               ),
             ),
-           
+
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              width: w * 0.6,
+              height: 48,
+              child: RaisedButton(
+                elevation: 8,
+                color: Colors.green,
+                child: Text(
+                  'Settings',
+                  style: whitetxt(16),
+                ),
+                shape: roundedSideMenu(32.0),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
           ],
         ),
       ],
     );
+  }
+
+  BottomNavigationBar btnav() {
+    return BottomNavigationBar(
+     elevation: 0,
+        onTap: (idx) {
+          setState(() {
+            btindex = idx;
+          });
+        },
+        backgroundColor: Colors.transparent,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        currentIndex: btindex,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.star), title: Text('Featured')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.new_releases), title: Text('HOT')),
+        ]);
   }
 }

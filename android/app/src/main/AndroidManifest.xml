@@ -10,7 +10,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="awapp"
+        android:label="Android වැඩකාරයෝ"
         android:icon="@mipmap/ic_launcher">
 
         
