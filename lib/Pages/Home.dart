@@ -18,6 +18,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
+
   int btindex = 0;
   var postsList;
   var postslength = 0;
@@ -29,6 +30,16 @@ class _HomeState extends State<Home> {
   var links = [];
   int postamount = 0;
   String apikey = apiKey();
+
+  //SigninData
+  var uname = 'Android වැඩකාරයෝ';
+  var uid = '0';
+  var uimage =
+      'https://androidwedakarayo.com/content/images/2020/04/xandroid-11-android-wedakarayo.jpg.pagespeed.ic.-tx9oKiZEz.webp';
+  var islogged = 'Login';
+  var uemail = 'App V0.1';
+  var logcolor = Colors.green;
+  //
 
   void mainStream(int post) async {
     var response = await http.get(
@@ -171,29 +182,57 @@ class _HomeState extends State<Home> {
             Container(
               height: w * 0.2,
               width: w * 0.2,
-              child: Card(
-                  shape: rounded(256.0),
-                  child: Icon(
-                    Icons.android,
-                    size: 48,
-                    color: Colors.green,
-                  )),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(256),
+                child: new CachedNetworkImage(
+                  imageUrl: uimage,
+                  placeholder: (context, url) => Container(
+                    margin: EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8),
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.green,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
             ),
             Text(
-              'Android වැඩකාරයෝ',
+              uname,
               style: whiteboldtxt(16),
             ),
-            Text('App V 0.1', style: whitetxt(16)),
+            Text(uemail, style: whitetxt(16)),
             RaisedButton(
                 child: Text(
-                  'Login',
+                  islogged,
                   style: whitetxt(16),
                 ),
-                color: Colors.green,
+                color: logcolor,
                 shape: rounded(16.0),
-                onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Sign()));
+                onPressed: () async {
+                  if (islogged == 'Login') {
+                    var udata = await handleSignIn();
+                    setState(() {
+                      uname = udata.displayName;
+                      uid = udata.uid;
+                      uimage = udata.photoUrl;
+                      islogged = 'LogOut';
+                      uemail = udata.email;
+                      logcolor = Colors.red;
+                    });
+                  } else {
+                    var udata = await handleSignIn();
+                    setState(() {
+                      udata.delete();
+                      uname = 'Android වැඩකාරයෝ';
+                       uid = '0';
+                       uimage =
+                          'https://androidwedakarayo.com/content/images/2020/04/xandroid-11-android-wedakarayo.jpg.pagespeed.ic.-tx9oKiZEz.webp';
+                       islogged = 'Login';
+                       uemail = 'App V0.1';
+                       logcolor = Colors.green;
+                    });
+                  }
                 })
           ],
         ),
