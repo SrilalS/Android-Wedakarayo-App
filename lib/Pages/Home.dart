@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:awapp/Pages/Article.dart';
+import 'package:awapp/Pages/Hot.dart';
 import 'package:awapp/Pages/Keys.dart';
+import 'package:awapp/Pages/Saved.dart';
 import 'package:awapp/Pages/sign.dart';
+import 'package:awapp/Services/Service.dart';
+import 'package:awapp/Services/Userdta.dart';
 import 'package:awapp/Styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -19,9 +22,13 @@ class _HomeState extends State<Home> {
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
+  final pgcontroller = PageController(initialPage: 0);
+  int pageindex = 0;
+
   int btindex = 0;
   var postsList;
   var postslength = 0;
+  var postid = [];
   var txt = [];
   var titles = [];
   var img = [];
@@ -31,12 +38,20 @@ class _HomeState extends State<Home> {
   int postamount = 0;
   String apikey = apiKey();
 
+  //Reactions Colors and Stuff
+  Color addbtn = Colors.green;
+  Color lovebtn = Colors.green;
+  var lovelist = [];
+
+  //
+
   //SigninData
   var uname = 'Android වැඩකාරයෝ';
   var uid = '0';
-  var uimage = 'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
-  var islogged = 'Login';
-  var uemail = 'App V0.1';
+  var uimage =
+      'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
+  var isloggedString = 'Login';
+  var uemail = 'App V1.2';
   var logcolor = Colors.green;
   //
 
@@ -55,16 +70,48 @@ class _HomeState extends State<Home> {
         authors.add(posts['posts'][0]['authors'][0]['name']);
         dates.add(posts['posts'][0]['published_at']);
         links.add(posts['posts'][0]['url']);
+        postid.add(posts['posts'][0]['id']);
+        lovelist.add(Colors.green);
       });
       postsList = posts;
     }
     postamount += 1;
-    if (post < postslength) {
+    //TODO Remove the Post Limit
+    if (post < postslength && post < 32) {
       mainStream(post + 1);
     } else {
       refreshController.loadComplete();
       refreshController.refreshCompleted();
     }
+  }
+
+  void signoffer() async {
+    Navigator.pop(context);
+    var udata = await handleSignIn();
+    setState(() {
+      isLogged = false;
+      udata.delete();
+      uname = 'Android වැඩකාරයෝ';
+      uid = '0';
+      uimage =
+          'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
+      isloggedString = 'Login';
+      uemail = 'App V1.2';
+      logcolor = Colors.green;
+    });
+  }
+
+  void signiner() async {
+    Navigator.pop(context);
+    var udata = await handleSignIn();
+    setState(() {
+      uname = udata.displayName;
+      uid = udata.uid;
+      uimage = udata.photoUrl;
+      isloggedString = 'LogOut';
+      uemail = udata.email;
+      logcolor = Colors.red;
+    });
   }
 
   void refresh() async {
@@ -101,73 +148,112 @@ class _HomeState extends State<Home> {
         title: Text('Android වැඩකාරයෝ'),
       ),
       bottomNavigationBar: btnav(),
-      body: SmartRefresher(
-        enablePullDown: true,
-        header: WaterDropMaterialHeader(),
-        onRefresh: () {
-          refresh();
-        },
-        controller: refreshController,
-        child: ListView.builder(
-            itemCount: postamount,
-            itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.all(8),
-                width: w * 0.9,
-                child: InkWell(
-                  splashColor: Colors.green[900],
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Article(
-                                  img: img[index],
-                                  post: txt[index],
-                                  title: titles[index],
-                                  author: authors[index],
-                                  dates: dates[index],
-                                  url: links[index],
-                                )));
-                  },
-                  child: Card(
-                    elevation: 8,
-                    shape: rounded(16.0),
-                    child: Column(
-                      children: <Widget>[
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(16),
-                            topLeft: Radius.circular(16),
-                          ),
-                          child: new CachedNetworkImage(
-                            imageUrl: img[index],
-                            placeholder: (context, url) => Container(
-                              margin: EdgeInsets.all(8),
-                              padding: EdgeInsets.all(8),
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.green,
+      body: PageView(
+          controller: pgcontroller,
+          onPageChanged: (index) {
+            setState(() {
+              pageindex = index;
+            });
+          },
+          children: <Widget>[
+            SmartRefresher(
+              enablePullDown: true,
+              header: WaterDropMaterialHeader(),
+              onRefresh: () {
+                refresh();
+              },
+              controller: refreshController,
+              child: ListView.builder(
+                  itemCount: postamount,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.all(8),
+                      width: w * 0.9,
+                      child: InkWell(
+                        splashColor: Colors.green[900],
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Article(
+                                        img: img[index],
+                                        post: txt[index],
+                                        title: titles[index],
+                                        author: authors[index],
+                                        dates: dates[index],
+                                        url: links[index],
+                                      )));
+                        },
+                        child: Card(
+                          elevation: 8,
+                          shape: rounded(16.0),
+                          child: Column(
+                            children: <Widget>[
+                              Stack(
+                                alignment: AlignmentDirectional.topEnd,
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(16),
+                                      topLeft: Radius.circular(16),
+                                    ),
+                                    child: new CachedNetworkImage(
+                                      imageUrl: img[index],
+                                      placeholder: (context, url) => Container(
+                                        margin: EdgeInsets.all(8),
+                                        padding: EdgeInsets.all(8),
+                                        child: CircularProgressIndicator(
+                                          backgroundColor: Colors.green,
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
+                                  ),
+                                  isLogged ? Column(
+                                    children: <Widget>[
+                                      FloatingActionButton(
+                                        heroTag: postid[index] + 'AS',
+                                          mini: true,
+                                          child: Icon(Icons.add),
+                                          onPressed: () {
+                                            addtoSaved(titles[index], links[index], postid[index]);
+                                          }),
+
+                                      FloatingActionButton(
+                                        heroTag: postid[index] + 'LV',
+                                          mini: true,
+                                          backgroundColor: lovelist[index],
+                                          child: Icon(Icons.favorite),
+                                          onPressed: () {
+                                            setState(() {
+                                              lovelist[index] == Colors.pink ? lovelist[index] = Colors.green:lovelist[index] = Colors.pink;
+                                            });
+                                          }),
+                                        Text('600')
+                                    ],
+                                  ) : Container()
+                                ],
                               ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                              Container(
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(4),
+                                child: Text(
+                                  titles[index],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        Container(
-                          margin: EdgeInsets.all(4),
-                          padding: EdgeInsets.all(4),
-                          child: Text(
-                            titles[index],
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-      ),
+                      ),
+                    );
+                  }),
+            ),
+            Hot(),
+            SavedItems(),
+          ]),
     );
   }
 
@@ -203,34 +289,16 @@ class _HomeState extends State<Home> {
             Text(uemail, style: whitetxt(16)),
             RaisedButton(
                 child: Text(
-                  islogged,
+                  isloggedString,
                   style: whitetxt(16),
                 ),
                 color: logcolor,
                 shape: rounded(16.0),
                 onPressed: () async {
-                  if (islogged == 'Login') {
-                    var udata = await handleSignIn();
-                    setState(() {
-                      uname = udata.displayName;
-                      uid = udata.uid;
-                      uimage = udata.photoUrl;
-                      islogged = 'LogOut';
-                      uemail = udata.email;
-                      logcolor = Colors.red;
-                    });
+                  if (isloggedString == 'Login') {
+                    signiner();
                   } else {
-                    var udata = await handleSignIn();
-                    setState(() {
-                      udata.delete();
-                      uname = 'Android වැඩකාරයෝ';
-                       uid = '0';
-                       uimage =
-                          'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
-                       islogged = 'Login';
-                       uemail = 'App V0.1';
-                       logcolor = Colors.green;
-                    });
+                    signoffer();
                   }
                 })
           ],
@@ -299,22 +367,21 @@ class _HomeState extends State<Home> {
 
   BottomNavigationBar btnav() {
     return BottomNavigationBar(
+        showUnselectedLabels: false,
         elevation: 0,
         onTap: (idx) {
-          setState(() {
-            btindex = idx;
-          });
+          pgcontroller.animateToPage(idx,
+              duration: Duration(milliseconds: 250), curve: Curves.linear);
         },
         backgroundColor: Colors.transparent,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(0.5),
-        currentIndex: btindex,
+        currentIndex: pageindex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(
               icon: Icon(Icons.star), title: Text('Featured')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.new_releases), title: Text('HOT')),
+          BottomNavigationBarItem(icon: Icon(Icons.save), title: Text('Saved')),
         ]);
   }
 }
