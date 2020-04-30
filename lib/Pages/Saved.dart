@@ -26,6 +26,7 @@ class _SavedItemsState extends State<SavedItems> {
                 builder: (context, data) {
                   if (data.connectionState == ConnectionState.waiting) {
                     return LinearProgressIndicator(
+                      backgroundColor: Colors.green,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     );
                   }

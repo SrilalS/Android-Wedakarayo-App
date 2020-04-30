@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
 import 'package:awapp/Pages/Article.dart';
-import 'package:awapp/Pages/Hot.dart';
+import 'package:awapp/Pages/Cats.dart';
 import 'package:awapp/Pages/Keys.dart';
 import 'package:awapp/Pages/Saved.dart';
 import 'package:awapp/Pages/sign.dart';
@@ -203,37 +203,51 @@ class _HomeState extends State<Home> {
                                       placeholder: (context, url) => Container(
                                         margin: EdgeInsets.all(8),
                                         padding: EdgeInsets.all(8),
-                                        child: CircularProgressIndicator(
+                                        child: LinearProgressIndicator(
                                           backgroundColor: Colors.green,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                         ),
                                       ),
                                       errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
+                                          LinearProgressIndicator(
+                                        backgroundColor: Colors.green,
+                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      ),
                                     ),
                                   ),
-                                  isLogged ? Column(
-                                    children: <Widget>[
-                                      FloatingActionButton(
-                                        heroTag: postid[index] + 'AS',
-                                          mini: true,
-                                          child: Icon(Icons.add),
-                                          onPressed: () {
-                                            addtoSaved(titles[index], links[index], postid[index]);
-                                          }),
-
-                                      FloatingActionButton(
-                                        heroTag: postid[index] + 'LV',
-                                          mini: true,
-                                          backgroundColor: lovelist[index],
-                                          child: Icon(Icons.favorite),
-                                          onPressed: () {
-                                            setState(() {
-                                              lovelist[index] == Colors.pink ? lovelist[index] = Colors.green:lovelist[index] = Colors.pink;
-                                            });
-                                          }),
-                                        Text('600')
-                                    ],
-                                  ) : Container()
+                                  isLogged
+                                      ? Column(
+                                          children: <Widget>[
+                                            FloatingActionButton(
+                                                heroTag: postid[index] + 'AS',
+                                                mini: true,
+                                                child: Icon(Icons.add),
+                                                onPressed: () {
+                                                  addtoSaved(
+                                                      titles[index],
+                                                      links[index],
+                                                      postid[index]);
+                                                }),
+                                            FloatingActionButton(
+                                                heroTag: postid[index] + 'LV',
+                                                mini: true,
+                                                backgroundColor:
+                                                    lovelist[index],
+                                                child: Icon(Icons.favorite),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    lovelist[index] ==
+                                                            Colors.pink
+                                                        ? lovelist[index] =
+                                                            Colors.green
+                                                        : lovelist[index] =
+                                                            Colors.pink;
+                                                  });
+                                                }),
+                                            Text('600')
+                                          ],
+                                        )
+                                      : Container()
                                 ],
                               ),
                               Container(
@@ -251,7 +265,7 @@ class _HomeState extends State<Home> {
                     );
                   }),
             ),
-            Hot(),
+            Cats(),
             SavedItems(),
           ]),
     );
@@ -380,7 +394,7 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.star), title: Text('Featured')),
+              icon: Icon(Icons.list), title: Text('Categories')),
           BottomNavigationBarItem(icon: Icon(Icons.save), title: Text('Saved')),
         ]);
   }
