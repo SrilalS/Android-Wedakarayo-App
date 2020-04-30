@@ -14,9 +14,7 @@ class _CatsState extends State<Cats> {
     catStreamMaker();
   }
 
-  void stMgr(){
-    
-  }
+  void stMgr() {}
 
   @override
   Widget build(BuildContext context) {
@@ -26,42 +24,42 @@ class _CatsState extends State<Cats> {
       backgroundColor: Colors.green,
       body: Center(
         child: Container(
-            height: h,
-            width: w * 0.9,
-            child: StreamBuilder(
+          height: h,
+          width: w * 0.9,
+          child: StreamBuilder(
               stream: catStreamMaker().asStream(),
-              builder: (context, tags){
-                if (taglist.length < 1){
+              builder: (context, tags) {
+                if (taglist.length < 1) {
                   return Column(
                     children: <Widget>[
                       LinearProgressIndicator(
                         backgroundColor: Colors.green,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
                     ],
                   );
                 }
-              return ListView.builder(
-                itemCount: taglist.length,
-                itemBuilder: (context, index) {
-                  if (taglist.length <1){
-                    return LinearProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    );
-                  }
-                  return Card(
-                    child: InkWell(
-                      splashColor: Colors.green,
-                      onTap: () {},
-                      child: ListTile(
-                        title: Text(taglist[index]),
-                      ),
-                    ),
-                  );
-                });
-            }),
-                
-                ),
+                return ListView.builder(
+                    itemCount: taglist.length,
+                    itemBuilder: (context, index) {
+                      if (taglist.length < 1) {
+                        return LinearProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                        );
+                      }
+                      return Card(
+                        child: InkWell(
+                          splashColor: Colors.green,
+                          onTap: () {},
+                          child: ListTile(
+                            title: Text(taglist[index]),
+                          ),
+                        ),
+                      );
+                    });
+              }),
+        ),
       ),
     );
   }
