@@ -147,7 +147,7 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: Text('Android වැඩකාරයෝ'),
       ),
-      bottomNavigationBar: btnav(),
+      //bottomNavigationBar: btnav(),
       body: PageView(
           controller: pgcontroller,
           onPageChanged: (index) {
