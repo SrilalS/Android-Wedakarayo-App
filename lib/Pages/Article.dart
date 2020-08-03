@@ -39,7 +39,7 @@ class _ArticleState extends State<Article> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.green,
+      statusBarColor: Theme.of(context).primaryColor,
     ));
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
@@ -75,7 +75,7 @@ class _ArticleState extends State<Article> {
                       children: <Widget>[
                         Text(
                           'Android  වැඩකාරයෝ',
-                          style: whiteboldtxt(24),
+                          style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
                     ),

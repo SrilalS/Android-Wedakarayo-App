@@ -13,12 +13,25 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+  void themeEngine(){
+    Get.changeTheme(ThemeData(
+      primaryColor: Colors.green,
+    ));
+  }
+
 class Home extends StatefulWidget {
+  
   @override
   _HomeState createState() => _HomeState();
+  
+
 }
 
 class _HomeState extends State<Home> {
+  
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
@@ -38,6 +51,8 @@ class _HomeState extends State<Home> {
   int postamount = 0;
   String apikey = apiKey();
 
+
+  
   //Reactions Colors and Stuff
   Color addbtn = Colors.green;
   Color lovebtn = Colors.green;
@@ -77,7 +92,7 @@ class _HomeState extends State<Home> {
     }
     postamount += 1;
     //TODO Remove the Post Limit
-    if (post < postslength && post < 32) {
+    if (post < postslength && post < 2) {
       mainStream(post + 1);
     } else {
       refreshController.loadComplete();
@@ -127,21 +142,28 @@ class _HomeState extends State<Home> {
     });
   }
 
+
+
+  
   @override
   void initState() {
     super.initState();
     mainStream(1);
+    //themeEngine();
+    //Get.changeTheme(ThemeData.dark());
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
     double h = MediaQuery.of(context).size.height;
     double w = MediaQuery.of(context).size.width;
-
+    //themeEngine();
     return Scaffold(
       drawerScrimColor: Colors.grey[900].withOpacity(0.95),
       drawer: drawer(h, w),
-      backgroundColor: Colors.green,
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
@@ -166,6 +188,7 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                   itemCount: postamount,
                   itemBuilder: (context, index) {
+                    
                     return Container(
                       padding: EdgeInsets.all(8),
                       width: w * 0.9,
@@ -186,7 +209,7 @@ class _HomeState extends State<Home> {
                                       )));
                         },
                         child: Card(
-                          elevation: 8,
+                          elevation: 4,
                           shape: rounded(16.0),
                           child: Column(
                             children: <Widget>[
@@ -298,13 +321,13 @@ class _HomeState extends State<Home> {
             ),
             Text(
               uname,
-              style: whiteboldtxt(16),
+              style: whitetxtdef(16),
             ),
-            Text(uemail, style: whitetxt(16)),
+            Text(uemail, style: whitetxtdef(16)),
             RaisedButton(
                 child: Text(
                   isloggedString,
-                  style: whitetxt(16),
+                  style: whitetxtdef(16),
                 ),
                 color: logcolor,
                 shape: rounded(16.0),
@@ -331,7 +354,7 @@ class _HomeState extends State<Home> {
                 color: Colors.green,
                 child: Text(
                   'Join Android වැඩකාරයෝ',
-                  style: whitetxt(16),
+                  style: whitetxtdef(16),
                 ),
                 shape: roundedSideMenu(32.0),
                 onPressed: () {
@@ -348,7 +371,7 @@ class _HomeState extends State<Home> {
                 color: Colors.green,
                 child: Text(
                   'Visit WebSite',
-                  style: whitetxt(16),
+                  style: whitetxtdef(16),
                 ),
                 shape: roundedSideMenu(32.0),
                 onPressed: () {
@@ -365,13 +388,42 @@ class _HomeState extends State<Home> {
                 color: Colors.green,
                 child: Text(
                   'Settings',
-                  style: whitetxt(16),
+                  style: whitetxtdef(16),
                 ),
                 shape: roundedSideMenu(32.0),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              width: w * 0.6,
+              height: 48,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Dark Mode :" , style: TextStyle(color: Colors.white, fontSize: 16),),
+                  Switch(
+                    
+                    value: dmodeval, onChanged: (val) async{
+                    if (val){
+                      Get.changeTheme(ThemeData.dark());
+                      setState(() {
+                        dmodeval =true;
+                      });
+                    } else {
+                      Get.changeTheme(ThemeData(brightness: Brightness.light, primaryColor: Colors.green));
+                      setState(() {
+                        dmodeval =false;
+                      });
+                    }
+
+                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                    sharedPreferences.setBool("DMODE", val);
+                  }),
+                ],
+              )
             ),
           ],
         ),

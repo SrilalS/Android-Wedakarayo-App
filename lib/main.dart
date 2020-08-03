@@ -1,26 +1,29 @@
 import 'package:awapp/Pages/Home.dart';
+import 'package:awapp/Styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
+void main() async {
   
-  @override
-  Widget build(BuildContext context) {
+  runApp(GetMaterialApp(
+    debugShowCheckedModeBanner: false,
+    initialRoute: '/',
+    defaultTransition: Transition.cupertinoDialog,
+    theme: ThemeData(primaryColor: Colors.green),
+    home: Home(),
+  ));
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.green,
-        statusBarBrightness: Brightness.light,
-        statusBarColor: Colors.green));
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  bool dmode = sharedPreferences.getBool("DMODE") ?? false;
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Android වැඩකාරයෝ',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: Home(),
-    );
+  if (dmode) {
+    Get.changeTheme(ThemeData.dark());
+    dmodeval = true;
+  } else {
+    Get.changeTheme(
+        ThemeData(brightness: Brightness.light, primaryColor: Colors.green));
+        dmodeval = false;
   }
+
 }
