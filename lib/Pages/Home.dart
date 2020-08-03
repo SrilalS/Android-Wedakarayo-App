@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
     }
     postamount += 1;
     //TODO Remove the Post Limit
-    if (post < postslength && post < 2) {
+    if (post < postslength && post < 32) {
       mainStream(post + 1);
     } else {
       refreshController.loadComplete();
