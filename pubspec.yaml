@@ -26,9 +26,6 @@ dependencies:
   pull_to_refresh: ^1.5.8
   share: ^0.6.3+6
   cached_network_image: ^2.1.0+1
-  firebase_auth: ^0.16.0
-  google_sign_in: ^4.4.1
-  cloud_firestore: ^0.13.5
   shared_preferences: ^0.5.8
 
 dev_dependencies:

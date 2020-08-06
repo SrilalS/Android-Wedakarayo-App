@@ -3,10 +3,7 @@ import 'dart:ui';
 import 'package:awapp/Pages/Article.dart';
 import 'package:awapp/Pages/Cats.dart';
 import 'package:awapp/Pages/Keys.dart';
-import 'package:awapp/Pages/Saved.dart';
-import 'package:awapp/Pages/sign.dart';
 import 'package:awapp/Services/Service.dart';
-import 'package:awapp/Services/Userdta.dart';
 import 'package:awapp/Styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -100,34 +97,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void signoffer() async {
-    Navigator.pop(context);
-    var udata = await handleSignIn();
-    setState(() {
-      isLogged = false;
-      udata.delete();
-      uname = 'Android වැඩකාරයෝ';
-      uid = '0';
-      uimage =
-          'https://androidwedakarayo.com/content/images/2020/04/avatardef.jpg';
-      isloggedString = 'Login';
-      uemail = 'App V1.2';
-      logcolor = Colors.green;
-    });
-  }
-
-  void signiner() async {
-    Navigator.pop(context);
-    var udata = await handleSignIn();
-    setState(() {
-      uname = udata.displayName;
-      uid = udata.uid;
-      uimage = udata.photoUrl;
-      isloggedString = 'LogOut';
-      uemail = udata.email;
-      logcolor = Colors.red;
-    });
-  }
 
   void refresh() async {
     postslength = 0;
@@ -246,10 +215,7 @@ class _HomeState extends State<Home> {
                                                 mini: true,
                                                 child: Icon(Icons.add),
                                                 onPressed: () {
-                                                  addtoSaved(
-                                                      titles[index],
-                                                      links[index],
-                                                      postid[index]);
+                                                 
                                                 }),
                                             FloatingActionButton(
                                                 heroTag: postid[index] + 'LV',
@@ -289,7 +255,7 @@ class _HomeState extends State<Home> {
                   }),
             ),
             Cats(),
-            SavedItems(),
+
           ]),
     );
   }
@@ -324,20 +290,6 @@ class _HomeState extends State<Home> {
               style: whitetxtdef(16),
             ),
             Text(uemail, style: whitetxtdef(16)),
-            RaisedButton(
-                child: Text(
-                  isloggedString,
-                  style: whitetxtdef(16),
-                ),
-                color: logcolor,
-                shape: rounded(16.0),
-                onPressed: () async {
-                  if (isloggedString == 'Login') {
-                    signiner();
-                  } else {
-                    signoffer();
-                  }
-                })
           ],
         ),
         SizedBox(
@@ -345,57 +297,6 @@ class _HomeState extends State<Home> {
         ),
         Column(
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 8),
-              width: w * 0.6,
-              height: 48,
-              child: RaisedButton(
-                elevation: 8,
-                color: Colors.green,
-                child: Text(
-                  'Join Android වැඩකාරයෝ',
-                  style: whitetxtdef(16),
-                ),
-                shape: roundedSideMenu(32.0),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 8),
-              width: w * 0.6,
-              height: 48,
-              child: RaisedButton(
-                elevation: 8,
-                color: Colors.green,
-                child: Text(
-                  'Visit WebSite',
-                  style: whitetxtdef(16),
-                ),
-                shape: roundedSideMenu(32.0),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 8),
-              width: w * 0.6,
-              height: 48,
-              child: RaisedButton(
-                elevation: 8,
-                color: Colors.green,
-                child: Text(
-                  'Settings',
-                  style: whitetxtdef(16),
-                ),
-                shape: roundedSideMenu(32.0),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
             Container(
               margin: EdgeInsets.only(bottom: 8),
               width: w * 0.6,
