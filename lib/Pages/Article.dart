@@ -1,5 +1,3 @@
-import 'package:awapp/Services/Service.dart';
-import 'package:awapp/Services/Userdta.dart';
 import 'package:awapp/Styles.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

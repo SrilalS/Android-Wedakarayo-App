@@ -9,7 +9,6 @@ class Cats extends StatefulWidget {
 class _CatsState extends State<Cats> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     catStreamMaker();
   }
